@@ -1,0 +1,20 @@
+Task-1
+-install kafka using docker.
+I installed kafka using docker
+docker network create kafka-network --driver bridge
+
+docker run -d --name zookeeper-server  --network kafka-network  -e ALLOW_ANONYMOUS_LOGIN=yes   bitnami/zookeeper:latest
+
+docker run -d --name kafka-server   --network kafka-network   -e ALLOW_PLAINTEXT_LISTENER=yes  -e KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper-server:2181   bitnami/kafka:latest
+
+docker run -d --rm -p 9000:9000   --network kafka-network   -e KAFKA_BROKERCONNECT=kafka-server:9092  -e SERVER_SERVLET_CONTEXTPATH="/"  obsidiandynamics/kafdrop:latest
+-create a kafka topic using kafka cli command.
+kafka-server-topics.sh --create --topic my-topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+-send message to kafka topic using kafka cli command.
+1.docker exec -it kafka-server /bin/bash
+kafka-server-console-producer.sh --topic my-topic --bootstrap-server localhost:9092
+> MESAJ
+-listen messages produced on some topic using kafka cli command.
+kafka-server-console-consumer.sh --topic my-topic --from-beginning --bootstrap-server localhost:9092
+
+
